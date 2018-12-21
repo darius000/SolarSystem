@@ -1,0 +1,149 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Solar System</title>
+        <link rel="icon" href="favicon/favicon.ico" type="image/x-icon"/>
+        <style>
+            html,body {margin: 0 auto; width: 100%; height: 100%; }
+            canvas { width: 100%; height: 100%; margin : 0 auto; position:absolute; z-index:-1;}
+			p{color:#ffd800;}
+            a{color:#fef298;}
+        </style>
+    </head>
+    <body>
+        <script src="js/threex.atmosphericmaterial.js"></script>
+        <script src="js/three.js"></script>
+        <script src="js/DAT.GUI.js"></script>
+        <script src="js/cameraAim.js"></script>
+         <script src="js/LoaderSupport.js"></script>
+        <script src="js/math/mathfunc.js"></script>
+        <script src="js/OBJLoader.js"></script>
+        <script src="js/myObjects.js"></script>
+        <script src="js/myScene.js"></script>     
+        <!--<script src="js/InitScene.js"></script>-->
+        <script src="js/controls.js"></script>
+
+        <!--Information for each Planet-->
+        <div id="info" style="color:#ffd800;position:absolute; display:block;  z-index:1; top:20px; left:20px; background-color:#808080;border:5px solid #ffd800; padding:10px">
+            <h3 id="name" style="font-size:24px; text-align:center; font-family:'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', 'DejaVu Sans', Verdana, sans-serif"></h3>
+            <p id="radius">Radius: </p>
+            <p id="distance">Distance From Sun: </p>
+            <p id="tilt"style ="display:none">Axial Tilt: </p>
+            <p id="satellites">Total Satellites: </p>
+        </div>
+        <div id="controls" style="position:absolute; display:block; text-align:left; bottom:30px; z-index:2; left:20px">
+            <p>Controls: alt + MMB = PAN,f = FOCUS, alt + LMB = ROTATE, MMWheel = ZOOM, r = RESET ROTATION</p>
+        </div>
+        <div id="caption" style="bottom:90px; display:block; right:20px; z-index:2; position:absolute; width:100%; text-align:right; height:20px;">
+            <p>Textures: <a href="http://bit.ly/2E7jD1U" style=" text-decoration:none;">http://bit.ly/2E7jD1U</a></p>
+            <p>RingTextures: <a href="http://bit.ly/2FQFmM8" style=" text-decoration:none;">http://bit.ly/2FQFmM8</a></p>
+        </div>
+
+        <script>
+            var leftMouseButton, middleMouseButton = false;
+            var overScene = true;
+            var scaling = false;
+            //event listensers
+            window.addEventListener('resize', onWindowResize, false);
+            window.addEventListener('onchange', CameraLookAt, false);
+
+            document.onmousedown = function (evt) {
+                if (evt.button == 0) {
+                    leftMouseButton = true;
+                }
+                if (evt.button == 1) {
+                    middleMouseButton = true;
+                }
+            }
+            document.onmouseup = function (evt) {
+                if (evt.button == 0) {
+                    leftMouseButton = false;
+                }
+                if (evt.button == 1) {
+                    middleMouseButton = false;
+                }
+            }
+            document.onmousemove = function (evt) {
+
+                if (evt.altKey == true) {
+                    if (leftMouseButton == true) {
+                        //console.log(evt.movementX);
+                        Controls.RotateCamera(evt.movementX, "y");
+                        Controls.RotateCamera(evt.movementY, "z");
+                    }
+                    if (middleMouseButton == true) {
+                        Controls.PanCamera("x", -evt.movementX);
+                        Controls.PanCamera("y", evt.movementY);
+                    }
+                }
+            }
+
+            document.onmousewheel = function (evt) {
+                if (overScene) {
+                    Controls.ZoomCameraMouse(evt);
+                    evt.preventDefault(evt);
+                }
+            }
+            document.onkeydown = function (key) {
+                if (overScene)
+                    Controls.InputKey(key);
+            }
+            document.onmouseover = function () {
+                overScene = true;
+                //console.log(overScene);
+            }
+            document.onmouseout = function () {
+                overScene = false;
+                //console.log(overScene);
+            }
+
+            //render scene
+            function render() {
+
+                updateScene();
+
+                renderer.render(myScene, sceneCamera.camera);
+            }
+
+            //animate scene
+            function animate() {
+                requestAnimationFrame(animate);
+
+                render();
+            }
+
+            function CameraLookAt(value) {
+                Controls.CurrentPlanetName = value
+                for (var j = 0; j < myObjects.length; j++) {
+                    if (value == myObjects[j].name) {
+                        Controls.CurrentPlanet = myObjects[j];
+
+                        document.getElementById("name").innerHTML = myObjects[j].name;
+                        document.getElementById("radius").innerHTML = "Radius: " + myObjects[j].diameter / 2.0 + " Km";
+                        document.getElementById("distance").innerHTML = "Distance From Sun: " + myObjects[j].distance + " Million Km";
+                        if(myObjects[j].tilt !== undefined)
+                        {
+                            document.getElementById("tilt").innerHTML = "Axial Tilt: " + myObjects[j].tilt + "&deg";
+                            document.getElementById("tilt").style.display = "block";
+                        }          
+                        else{
+                            document.getElementById("tilt").style.display = "none";
+                        }
+                        document.getElementById("satellites").innerHTML = "Total Moons: " + myObjects[j].satellites;
+
+                        GoToPlanet(myObjects[j]);
+                    }
+                }
+
+            }
+
+            initWebGl();
+            CreateControlBox();
+            CameraLookAt(myObjects[0]);
+            animate();
+        </script>
+    </body>
+</html>
+
+
