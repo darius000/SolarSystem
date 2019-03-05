@@ -1,0 +1,3 @@
+[submodule "threex.geometricglow"]
+	path = threex.geometricglow
+	url = https://github.com/jeromeetienne/threex.geometricglow
