@@ -78,7 +78,7 @@ class CameraAim extends THREE.PerspectiveCamera
         {
             this.position.z = (this.m_CurrentPlanet.m_Diameter);
             this.position.y = 0;
-            this.position.x = (-this.m_CurrentPlanet.m_Diameter);
+            this.position.x = (this.m_CurrentPlanet.m_Diameter);
 
             this.SetTarget(this.m_LookPosition);
         }
@@ -100,7 +100,7 @@ class CameraAim extends THREE.PerspectiveCamera
 
         this.position.z = (object.m_Diameter);
         this.position.y = 0;
-        this.position.x = (object.m_Diameter);
+        this.position.x = (-object.m_Diameter);
         this.SetTarget(object.position);
     }
 
