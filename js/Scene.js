@@ -108,9 +108,9 @@ class SolarSystem extends Scene
 
         for (let i = 0; i < CelestrialObjects.length; i++)
         {
-            CelestrialObjects[i].Init(); 
-
             this.add(CelestrialObjects[i]);
+
+            CelestrialObjects[i].Init(); 
         }
 
         this.m_Camera.ViewObject(3);
@@ -140,6 +140,7 @@ class Controls
         this.m_Camera             =   camera;
         this.m_Gui                =   new dat.GUI({ load: JSON });
         this.m_PlanetFolder       =   this.m_Gui.addFolder("Objects");
+        this.m_CameraFolder       =   this.m_Gui.addFolder("Camera Setting");
         this.m_BasicFolder        =   this.m_Gui.addFolder("Basic");
     }
 
@@ -203,6 +204,9 @@ class Controls
         }
     
         this.m_PlanetFolder.open();
+
+        this.m_CameraFolder.add(this.m_Camera, "m_PanSpeed", .01, 10).name("Pan Speed");
+        this.m_CameraFolder.add(this.m_Camera, "m_ZoomSpeed", 0.001, 10).name("Zoom Speed");
 
         this.m_BasicFolder.add(this, "ToggleInfoDiv");  
     }

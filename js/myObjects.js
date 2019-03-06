@@ -100,6 +100,11 @@ class CelestrialBody extends THREE.Object3D
     this.add(this.m_Mesh);
 
     this.position.set(this.m_Distance, 0, 0);
+
+    for(let i = 0; i < this.m_Children.length; i++)
+    {
+      this.m_Children[i].Init();
+    }
   }
 
   Rotate(DeltaTime) 
@@ -107,16 +112,9 @@ class CelestrialBody extends THREE.Object3D
     
   }
 
-  Revolve(DeltaTime) 
-  {
-
-  }
-
   Update(DeltaTime) {
 
     this.Rotate(DeltaTime);
-
-    this.Revolve(DeltaTime);
 
     for(let i = 0; i < this.m_Children.length; ++i)
     {
@@ -148,13 +146,16 @@ class CelestrialBody extends THREE.Object3D
     }
   }
 
+  RenderOrbit(scene = new THREE.Scene())
+  {
+
+  }
+
   AddChild(celestrialBody = new CelestrialBody, distance = 0.0) 
   {
     RemoveFromArray(CelestrialObjects, celestrialBody);
 
     this.m_Children.push(celestrialBody);
-
-    celestrialBody.Init();
 
     this.add(celestrialBody);
   }
@@ -242,7 +243,7 @@ class Planet extends CelestrialBody {
   Init() {
     super.Init();
 
-    this.m_Mesh.rotateX(ToRadians(this.tilt));
+    this.m_Mesh.rotateZ(ToRadians(this.tilt));
     
   }
 
@@ -260,6 +261,7 @@ class Planet extends CelestrialBody {
       this.clouds.rotateY(ToRadians(this.m_CloudSpeed));
     }
   }
+
   //Speed in miles per hour
   SetCloudsSpeed(speed = 0.0)
   {
@@ -271,7 +273,7 @@ class Planet extends CelestrialBody {
 
   Clouds(diffuse, alpha) {
     var sphere = new THREE.SphereGeometry(
-      this.m_Mesh.geometry.parameters.radius + this.m_Mesh.geometry.parameters.radius * 0.025,
+      this.m_Mesh.geometry.parameters.radius + this.m_Mesh.geometry.parameters.radius * 0.01,
       32,
       32
     );
@@ -315,7 +317,7 @@ class Planet extends CelestrialBody {
 
   Atmosphere(color) {
     var sphere = new THREE.SphereGeometry(
-      this.m_Mesh.geometry.parameters.radius + this.m_Mesh.geometry.parameters.radius * 0.03,
+      this.m_Mesh.geometry.parameters.radius + this.m_Mesh.geometry.parameters.radius * 0.012,
       32,
       32
     );
