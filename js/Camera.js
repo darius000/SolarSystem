@@ -6,7 +6,7 @@ class CameraAim extends THREE.PerspectiveCamera
     {
         super(fov, aspect, near, far);
         this.m_PanSpeed     = .1;
-        this.m_ZoomSpeed    = 0.0001;
+        this.m_ZoomSpeed    = 0.01;
         this.m_RotateSpeed  = 1.0;
         this.m_CurrentPlanet = null;
         this.m_LookPosition = new THREE.Vector3();
@@ -43,7 +43,7 @@ class CameraAim extends THREE.PerspectiveCamera
     //Pan the camera
     Pan(event) 
     {
-        if(Input.GetMouseButtonDown() == 1 && Input.GetKey() == 'Alt')
+        if(Input.GetMouseButtonDown() == 0)
         {
             if(event.detail.position.x > 0)
                 this.translateX(this.m_PanSpeed);
@@ -65,7 +65,11 @@ class CameraAim extends THREE.PerspectiveCamera
     {
         var delta = this.m_ZoomSpeed * event.detail.delta;
 
-        this.translateZ(delta);
+        var forward = new THREE.Vector3();
+        this.getWorldDirection(forward);
+
+        this.position.addVectors(this.position, forward.multiplyScalar(-delta));
+
         this.updateProjectionMatrix();
     }
 
