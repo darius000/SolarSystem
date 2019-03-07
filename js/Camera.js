@@ -56,7 +56,7 @@ class CameraAim extends THREE.PerspectiveCamera
 	var right = new THREE.Vector3();
 	right.crossVectors(forward, up);
 	    
-	//this.m_Target = forward.multiplyScalar(1);
+	this.m_Target = forward.multiplyScalar(10);
 	    
         if(Input.GetMouseButtonDown() == this.mPanMouseButton)
         {
@@ -72,9 +72,9 @@ class CameraAim extends THREE.PerspectiveCamera
             else if(event.detail.position.y < 0)
                 this.position.add(up.multiplyScalar(-this.m_PanSpeed));
 		
-		console.log(right.multiplyScalar(this.m_PanSpeed));
-		console.log(up.multiplyScalar(this.m_PanSpeed));
-		console.log(this.position);
+	//console.log(right.multiplyScalar(this.m_PanSpeed));
+	//console.log(up.multiplyScalar(this.m_PanSpeed));
+	//console.log(this.position);
 
             this.UpdateTarget();
         }
