@@ -261,11 +261,11 @@ class Controls
     
         this.m_Controls.add(this.m_Camera, "m_PanSpeed", .01, 10).name("Pan Speed");
         this.m_Controls.add(this.m_Camera, "m_ZoomSpeed", 0.001, 10).name("Zoom Speed");
+	this.m_Controls.add(this.m_Camera, "mRotationSteps", 0.0, 10.0).name("RotationSteps");
         this.m_Controls.add(this.m_Camera, "mResetButton").name("Reset");
         this.m_Controls.add(this.m_Camera, "mPanMouseButton", { LMB : 0, MMB: 1, RMB: 2}).name("Pan");
         this.m_Controls.add(this.m_Camera, "mZoom", {ScrollWheel : "ScrollWheel"}).name("Zoom");
 	this.m_Controls.add(this.m_Camera, "mRotateMouseButton",{ LMB : 0, MMB: 1, RMB: 2}).name("Rotate");
-	this.m_Controls.add(this.m_Camera, "mRotationSteps", 0.0, 10.0).name("RotationSteps");
         this.m_Controls.open();
     }
 }
