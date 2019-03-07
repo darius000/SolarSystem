@@ -7,7 +7,7 @@ class CameraAim extends THREE.PerspectiveCamera
         super(fov, aspect, near, far);
         this.m_PanSpeed     = .1;
         this.m_ZoomSpeed    = 0.01;
-		this.m_RotateSpeed  = 0.1;
+		this.m_CurrentRotation  = 0;
         this.m_CurrentPlanet = null;
         this.m_PreviousPlanet = null;
         this.m_LookPosition = new THREE.Vector3();
@@ -100,15 +100,17 @@ class CameraAim extends THREE.PerspectiveCamera
 	{
 		if(Input.GetMouseButtonDown() == this.mRotateMouseButton)
         {
-			var position = new THREE.Vector3(Math.cos(ToRadians(this.m_RotateSpeed)), 0, Math.sin(ToRadians(this.m_RotateSpeed)));
+			var position = new THREE.Vector3(this.position.length() * Math.cos(ToRadians(this.m_CurrentRotation)), 0,this.position.length() * Math.sin(ToRadians(this.m_CurrentRotation)));
 			
 			console.log(position);
 			
 			if(event.detail.position.x > 0)
-                this.position.add(position);
+				this.m_CurrentRotation ++;         
 
             else if(event.detail.position.x < 0)
-                this.position.add(-position);
+				this.m_CurrentRotation--;
+          	
+			this.position.set(position);
 			
 			console.log(this.position);
        
