@@ -161,7 +161,6 @@ class Controls
         this.m_Gui                  = new dat.GUI({ load: JSON });
         this.m_Gui2                 = new dat.GUI({load: JSON});
         this.m_Gui3                 = new dat.GUI({load: JSON, autoPlace: false});
-        this.m_CameraFolder         = this.m_Gui3.addFolder("Camera Setting");
         this.m_Controls             = this.m_Gui3.addFolder("Camera Controls");
         this.m_Gui2AddedItems       = [];
 
@@ -260,10 +259,8 @@ class Controls
             ); 
         }
     
-        this.m_CameraFolder.add(this.m_Camera, "m_PanSpeed", .01, 10).name("Pan Speed");
-        this.m_CameraFolder.add(this.m_Camera, "m_ZoomSpeed", 0.001, 10).name("Zoom Speed");
-        this.m_CameraFolder.open();
-
+        this.m_Controls.add(this.m_Camera, "m_PanSpeed", .01, 10).name("Pan Speed");
+        this.m_Controls.add(this.m_Camera, "m_ZoomSpeed", 0.001, 10).name("Zoom Speed");
         this.m_Controls.add(this.m_Camera, "mResetButton").name("Reset");
         this.m_Controls.add(this.m_Camera, "mPanMouseButton", { LMB : 0, MMB: 1, RMB: 2}).name("Pan");
         this.m_Controls.add(this.m_Camera, "mZoom", {ScrollWheel : "ScrollWheel"}).name("Zoom");
