@@ -48,19 +48,27 @@ class CameraAim extends THREE.PerspectiveCamera
     //Pan the camera
     Pan(event) 
     {
+    	var forward = new THREE.Vector3();
+        this.getWorldDirection(forward);
+	    
+	var right = new THREE.Vector3();
+	right.crossVectors(forward, new THREE.Vector3(0, 1, 0));
+	    
+	//this.m_Target = forward.multiplyScalar(1);
+	    
         if(Input.GetMouseButtonDown() == this.mPanMouseButton)
         {
             if(event.detail.position.x > 0)
-                this.translateX(this.m_PanSpeed);
+                this.translateX(forward.multiplyScalar(this.m_PanSpeed));
 
             else if(event.detail.position.x < 0)
-                this.translateX(-this.m_PanSpeed);
+                this.translateX(forward.multiplyScalar(-this.m_PanSpeed));
             
             if(event.detail.position.y > 0)
-                this.translateY(this.m_PanSpeed);
+                this.translateY(right.multiplyScalar(this.m_PanSpeed));
 
             else if(event.detail.position.y < 0)
-                this.translateY(-this.m_PanSpeed);
+                this.translateY(right.multiplyScalar(-this.m_PanSpeed));
 
             this.UpdateTarget();
         }
@@ -74,6 +82,7 @@ class CameraAim extends THREE.PerspectiveCamera
         this.getWorldDirection(forward);
 
         this.position.addVectors(this.position, forward.multiplyScalar(-delta));
+	//this.position.z 
 
         this.updateProjectionMatrix();
     }
