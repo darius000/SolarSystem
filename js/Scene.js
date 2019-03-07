@@ -64,12 +64,25 @@ var uranus = new Planet("Uranus", 51118, 2900000000, 97.77, .7, 42877);
 uranus.SetTextures("tex/uranus/uranusmap.jpg", "", "");
 uranus.Rings(0, 51000 , "tex/uranus/uranusrings.png", "tex/uranus/uranusrings.png");
 
+var Miranda = new Planet("Miranda", 470, 129390, 0, 33.6, 33.6);
+Miranda.SetTextures("tex/uranus/miranda/miranda3.jpg", "" ,"");
+uranus.AddChild(Miranda);
+
 var neptune = new Planet("Neptune", 49528, 4500000000, 28.32, .6, 60148.35);
 neptune.SetTextures("tex/neptune/neptunemap.jpg", "", "");
 neptune.Rings(0 , 63000 ,"tex/neptune/neptunerings.png", "tex/neptune/neptunerings.png");
 
+var Triton = new Planet("Triton", 2710, 354759, 0, 141 ,678);
+Triton.SetTextures("tex/neptune/triton.jpg", "", "");
+neptune.AddChild(Triton);
+
 var pluto = new Planet("Pluto", 2306, 5900000000, 119.61, 6.4, 90461.6);
 pluto.SetTextures("tex/pluto/pluto.jpg", "", "");
+
+var Charon = new Planet("Charon",1212, 19570 , 0, 6.387, 6.387);
+Charon.SetTextures("tex/pluto/charon/charon.jpg", "", "");
+
+pluto.AddChild(Charon);
 
 
 class Scene extends THREE.Scene
@@ -107,7 +120,7 @@ class SolarSystem extends Scene
     {
         super.OnStart();
 
-        let ambient = new THREE.AmbientLight(0xffffff, .1);
+        var ambient = new THREE.AmbientLight(0xffffff, .05);
     
         this.background = new THREE.Color(0, 0, 0);
 
