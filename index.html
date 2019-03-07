@@ -8,6 +8,7 @@
             html,body {margin: 0 auto; width: 100%; height: 100%;}
             canvas { width: 100%; height: 100%;  margin: 0 auto; padding: 0 auto;}
             a{color:#fef298;}
+            #Title{position: fixed; margin: 0 auto; width: 100%; text-align: center; font-size: 36px; color: white; font-family: Verdana, Geneva, Tahoma, sans-serif;}
             #Settings{position: fixed; margin: 0 auto; width: 100%; bottom:3%; }
             #Planets{ margin: 0 auto; position:fixed; display: block; top: 0px;}
             #Moons{ margin: 0 auto; position:fixed; display: block; top: 0px; width: 100%; }
@@ -15,6 +16,7 @@
         </style>
     </head>
     <body>
+        <div id = "Title"><p>Solar System</p></div>
         <div id = "Planets"></div>
         <div id = "Moons"></div>
         <div id="Settings">
@@ -25,7 +27,14 @@
         </div>
         <script type="text/javascript" src="js/threex.atmospherematerial.js"></script>
         <script type="text/javascript" src="js/three.js"></script>
+        <script type="text/javascript" src="js/three.min.js"></script>       
         <script type="text/javascript" src="js/dat.gui.js"></script>
+        <script type="text/javascript" src="js/EffectComposer.js"></script>
+        <script type="text/javascript" src="js/RenderPass.js"></script>
+        <script type="text/javascript" src="js/ShaderPass.js"></script>
+        <script type="text/javascript" src="js/CopyShader.js"></script>
+        <script type="text/javascript" src="js/LuminosityHighPassShader.js"></script>
+        <script type="text/javascript" src="js/UnrealBloomPass.js"></script>
         <script type="text/javascript" src="js/Input.js"></script>
         <script type="text/javascript" src="js/Loaders/OBJLoader.js"></script>
         <script type="text/javascript" src="js/myObjects.js"></script>

@@ -2,6 +2,7 @@
 ///<reference path ="myObjects.js" />
 ///<reference path = "three.js" />
 ///<reference path = "dat.gui.js" />
+///<reference path = "UnrealBloomPass.js"/>
 
 var sun = new Star("Sun" , 1390404, 0, 1.0, 1.0, 6500);
 sun.SetEmission(new THREE.Color(1,1,1), "tex/sun/sunmap.jpg");
@@ -118,7 +119,7 @@ class SolarSystem extends Scene
         this.m_Controls = new Controls(this.m_Camera);
         this.m_Controls.CreateGUI();
 
-        this.m_Camera.ViewObject(3);
+        this.m_Camera.ViewObject(0);
         
     }
 
@@ -184,19 +185,19 @@ class Controls
         var previous = event.detail.previousPlanet;
         var current = event.detail.selectedPlanet;
 
-        console.log(event);
+       // console.log(event);
 
         if(previous != null)
         {
-            console.log(previous);
+            //console.log(previous);
 
-            console.log(previous.m_Children.length);
+            //console.log(previous.m_Children.length);
 
             for(let k = 0; k < previous.m_Children.length; k++)
             {
                 var child = previous.m_Children[k];
 
-                console.log(this.m_Gui2AddedItems[k]);
+                //console.log(this.m_Gui2AddedItems[k]);
 
                 this.m_Gui2.remove(this.m_Gui2AddedItems[k]);
             }

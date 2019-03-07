@@ -11,14 +11,19 @@ class Application
         this.m_Scenes       = [];
         this.m_Renderer     = new THREE.WebGLRenderer({ antialias: true });
         this.m_CurrentScene = null;
+        this.m_Composer     =  new THREE.EffectComposer(this.m_Renderer);
+        
     }
 
     Init()
     {
+        this.m_Renderer.setPixelRatio( window.devicePixelRatio );
         this.m_Renderer.setSize(window.innerWidth, window.innerHeight);
 
         this.m_Renderer.shadowMap.enabled = true;
         this.m_Renderer.shadowMap.type = THREE.BasicShadowMap;
+        this.m_Renderer.toneMapping = THREE.ReinhardToneMapping;
+        this.m_Renderer.toneMappingExposure = Math.pow( 1.10, 4.0 );
 
         document.body.appendChild(this.m_Renderer.domElement);
 
@@ -27,13 +32,15 @@ class Application
 
     Render()
     {
+        requestAnimationFrame(this.Render.bind(this));
+
         if(this.m_CurrentScene != null)
         {
             this.m_CurrentScene.OnUpdate(this.GetDeltaTime());
 
-            this.m_Renderer.render(this.m_CurrentScene, this.m_CurrentScene.m_Camera);
+            //this.m_Renderer.render(this.m_CurrentScene, this.m_CurrentScene.m_Camera);
 
-            requestAnimationFrame(this.Render.bind(this));
+            this.m_Composer.render();
         }
     }
 
@@ -48,6 +55,19 @@ class Application
         {
             this.m_CurrentScene = scene;
             this.m_CurrentScene.OnStart();
+ 
+            var renderScene = new THREE.RenderPass(this.m_CurrentScene, this.m_CurrentScene.m_Camera);
+
+            var bloomPass = new THREE.UnrealBloomPass(new THREE.Vector2( window.innerWidth, window.innerHeight ),1.5,0.4, 0.85);
+            bloomPass.renderToScreen = true;
+            bloomPass.threshold = 0;
+			bloomPass.strength = 1.5;
+			bloomPass.radius = 0;
+            
+            this.m_Composer.setSize(window.innerWidth, window.innerHeight);
+            this.m_Composer.addPass(renderScene);
+            this.m_Composer.addPass(bloomPass);
+
         }
     }
 
@@ -84,5 +104,6 @@ class Application
         }
 
         this.m_Renderer.setSize(window.innerWidth, window.innerHeight);
+        this.m_Composer.setSize(window.innerWidth, window.innerHeight);
     }
 }
