@@ -89,9 +89,9 @@ class CameraAim extends THREE.PerspectiveCamera
 	
         this.position.add(forward.multiplyScalar(-delta));
 	    
-    	console.log(this.position.length);
+    	console.log(this.position.length());
 	
-    	if(this.position.length < this.m_CurrentPlanet.m_Diameter)
+    	if(this.position.length() < this.m_CurrentPlanet.m_Diameter)
     	{
 	    console.log("Smaller");
     	}
