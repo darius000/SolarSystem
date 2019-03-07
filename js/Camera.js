@@ -88,17 +88,21 @@ class CameraAim extends THREE.PerspectiveCamera
         this.getWorldDirection(forward);
 	
         var newPosition = new THREE.Vector3();
-	newPosition.addVectors(this.position, forward.multiplyScalar(-delta));
+		newPosition.addVectors(this.position, forward.multiplyScalar(-delta));
 	    
     	//console.log(this.position.length());
 	
-    	if(newPosition.length() > this.m_CurrentPlanet.m_Diameter)
+    	if(newPosition.length() >= this.m_CurrentPlanet.m_Diameter)
     	{
-	    //console.log("Smaller");
-	    this.position.add(forward.multiplyScalar(-delta));
+	    	//console.log("Smaller");
+	    	this.position.add(forward.multiplyScalar(-delta));
+    	}
+	    else
+	    {
+			this.position.setLength(this.m_CurrentPlanet.m_Diameter);
+	    }
 		
-	    this.UpdateTarget();
-    	} 
+		this.UpdateTarget();
     }
 
     SetDefaultPosition()
