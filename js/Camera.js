@@ -7,6 +7,7 @@ class CameraAim extends THREE.PerspectiveCamera
         super(fov, aspect, near, far);
         this.m_PanSpeed     = .1;
         this.m_ZoomSpeed    = 0.01;
+		this.m_RotateSpeed  = 0.1;
         this.m_CurrentPlanet = null;
         this.m_PreviousPlanet = null;
         this.m_LookPosition = new THREE.Vector3();
@@ -14,12 +15,14 @@ class CameraAim extends THREE.PerspectiveCamera
         this.m_Helper       = new THREE.CameraHelper(this);
         this.mResetButton   = "f";
         this.mPanMouseButton = 1;
+		this.mRotateMouseButton = 0;
         this.mZoom    = "ScrollWheel";
         this.mDefaultPosition = new THREE.Vector3();
 
         this.UpdateTarget();
         
         document.addEventListener('OnMouseMoved', this.Pan.bind(this), false);
+		document.addEventListener('OnMouseMoved', this.Rotate.bind(this), false);
         document.addEventListener('OnMouseScrolled', this.Zoom.bind(this), false);
         document.addEventListener('OnKeyPressed', this.Reset.bind(this), false);
     } 
@@ -51,10 +54,10 @@ class CameraAim extends THREE.PerspectiveCamera
     	var forward = new THREE.Vector3();
         this.getWorldDirection(forward);
 	    
-	var up = new THREE.Vector3(0, 1, 0);
+		var up = new THREE.Vector3(0, 1, 0);
 	    
-	var right = new THREE.Vector3();
-	right.crossVectors(forward, up);
+		var right = new THREE.Vector3();
+		right.crossVectors(forward, up);
 	    
 	//this.m_Target = forward.multiplyScalar(10);
 	    
@@ -72,11 +75,11 @@ class CameraAim extends THREE.PerspectiveCamera
             else if(event.detail.position.y < 0)
                 this.position.add(up.multiplyScalar(-this.m_PanSpeed));
 		
-	//console.log(right.multiplyScalar(this.m_PanSpeed));
-	//console.log(up.multiplyScalar(this.m_PanSpeed));
-	//console.log(this.position);
-	    this.updateProjectionMatrix();
-            //this.UpdateTarget();
+			//console.log(right.multiplyScalar(this.m_PanSpeed));
+			//console.log(up.multiplyScalar(this.m_PanSpeed));
+			//console.log(this.position);
+	    	this.updateProjectionMatrix();
+          	//this.UpdateTarget();
         }
     }
 
@@ -92,6 +95,26 @@ class CameraAim extends THREE.PerspectiveCamera
 		
 		this.UpdateTarget();
     }
+	
+	Rotate(event)
+	{
+		if(Input.GetMouseButtonDown() == this.mRotateMouseButton)
+        {
+			var position = new THREE.Vector3(Math.cos(ToRadians(this.m_RotateSpeed)), 0, Math.sin(ToRadians(this.m_RotateSpeed)));
+			
+			console.log(position);
+			
+			if(event.detail.position.x > 0)
+                this.position.add(position);
+
+            else if(event.detail.position.x < 0)
+                this.position.add(-position);
+			
+			console.log(this.position);
+       
+			this.UpdateTarget();
+		}
+	}
 
     SetDefaultPosition()
     {
