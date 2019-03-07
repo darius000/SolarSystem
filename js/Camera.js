@@ -8,6 +8,7 @@ class CameraAim extends THREE.PerspectiveCamera
         this.m_PanSpeed     = .1;
         this.m_ZoomSpeed    = 0.01;
 	this.m_CurrentRotation  = 0;
+	this.mRotationSteps = 1.0;
         this.m_CurrentPlanet = null;
         this.m_PreviousPlanet = null;
         this.m_LookPosition = new THREE.Vector3();
@@ -15,14 +16,14 @@ class CameraAim extends THREE.PerspectiveCamera
         this.m_Helper       = new THREE.CameraHelper(this);
         this.mResetButton   = "f";
         this.mPanMouseButton = 1;
-		this.mRotateMouseButton = 0;
+	this.mRotateMouseButton = 0;
         this.mZoom    = "ScrollWheel";
         this.mDefaultPosition = new THREE.Vector3();
 
         this.UpdateTarget();
         
         document.addEventListener('OnMouseMoved', this.Pan.bind(this), false);
-		document.addEventListener('OnMouseMoved', this.Rotate.bind(this), false);
+	document.addEventListener('OnMouseMoved', this.Rotate.bind(this), false);
         document.addEventListener('OnMouseScrolled', this.Zoom.bind(this), false);
         document.addEventListener('OnKeyPressed', this.Reset.bind(this), false);
     } 
@@ -102,17 +103,17 @@ class CameraAim extends THREE.PerspectiveCamera
         {
 			var newposition = new THREE.Vector3(this.position.length() * Math.cos(ToRadians(this.m_CurrentRotation)), 0,this.position.length() * Math.sin(ToRadians(this.m_CurrentRotation)));
 			
-			console.log(newposition);
+			//console.log(newposition);
 			
 			if(event.detail.position.x > 0)
-				this.m_CurrentRotation ++;         
+				this.m_CurrentRotation += this.mRotationSteps;         
 
             else if(event.detail.position.x < 0)
-				this.m_CurrentRotation--;
+				this.m_CurrentRotation -= this.mRotationSteps;
           	
 			this.position.copy(newposition);
 			
-			console.log(this.position);
+			//console.log(this.position);
        
 			this.UpdateTarget();
 		}
