@@ -46,6 +46,10 @@ var jupiter = new Planet("Jupiter", 142984, 778300000, 3.0, .41, 4331.5);
 jupiter.SetTextures("tex/jupiter/jupitermap.jpg", "", "");
 jupiter.Rings(0, 128000,"tex/jupiter/jupiterrings.png","tex/jupiter/jupiterrings.png");
 
+var IO = new Planet("IO", 2262, 421800, 0, 42.5 , 42.5);
+IO.SetTextures("tex/jupiter/IO/Io.png", "tex/Jupiter/IO/IoNormal.png");
+jupiter.AddChild(IO);
+
 var saturn = new Planet("Saturn",120536, 1400000000, 26.73, .44, 10832);
 saturn.SetTextures("tex/saturn/saturnmap.png", "", "");
 saturn.Atmosphere(0xDDDDFF);
