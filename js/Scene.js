@@ -1,5 +1,7 @@
 // JavaScript source code
-/// <reference path="myObjects.js" />
+///<reference path ="myObjects.js" />
+///<reference path = "three.js" />
+///<reference path = "dat.gui.js" />
 
 var sun = new Star("Sun" , 1390404, 0, 1.0, 1.0, 6500);
 sun.SetEmission(new THREE.Color(1,1,1), "tex/sun/sunmap.jpg");
@@ -113,10 +115,10 @@ class SolarSystem extends Scene
             CelestrialObjects[i].Init(); 
         }
 
-        this.m_Camera.ViewObject(3);
-
         this.m_Controls = new Controls(this.m_Camera);
         this.m_Controls.CreateGUI();
+
+        this.m_Camera.ViewObject(3);
         
     }
 
@@ -137,16 +139,23 @@ class Controls
 {
     constructor(camera = new CameraAim(75, 16 /9, .01, 1000))
     {
-        this.m_Camera             =   camera;
-        this.m_Gui                =   new dat.GUI({ load: JSON });
-        this.m_PlanetFolder       =   this.m_Gui.addFolder("Objects");
-        this.m_CameraFolder       =   this.m_Gui.addFolder("Camera Setting");
-        this.m_BasicFolder        =   this.m_Gui.addFolder("Basic");
+        this.m_Camera               = camera;
+        this.m_Gui                  = new dat.GUI({ load: JSON });
+        this.m_Gui2                 = new dat.GUI({load: JSON});
+        this.m_Gui3                 = new dat.GUI({load: JSON, autoPlace: false});
+        this.m_CameraFolder         = this.m_Gui3.addFolder("Camera Setting");
+        this.m_Controls             = this.m_Gui3.addFolder("Camera Controls");
+        this.m_Gui2AddedItems       = [];
+
+        document.getElementById('Planets').appendChild(this.m_Gui.domElement);
+        document.getElementById('Moons').appendChild(this.m_Gui2.domElement);
+        document.getElementById('Settings').appendChild(this.m_Gui3.domElement);
+        document.addEventListener('OnSelectPlanet', this.AddSatelittes.bind(this), false);
     }
 
     Remember(object)
     {
-        this.m_Gui.remember(object);
+        this.m_Gui3.remember(object);
     }
     
 	ToggleInfoDiv()
@@ -169,6 +178,50 @@ class Controls
 	{
         
     }
+
+    AddSatelittes(event)
+    {
+        var previous = event.detail.previousPlanet;
+        var current = event.detail.selectedPlanet;
+
+        console.log(event);
+
+        if(previous != null)
+        {
+            console.log(previous);
+
+            console.log(previous.m_Children.length);
+
+            for(let k = 0; k < previous.m_Children.length; k++)
+            {
+                var child = previous.m_Children[k];
+
+                console.log(this.m_Gui2AddedItems[k]);
+
+                this.m_Gui2.remove(this.m_Gui2AddedItems[k]);
+            }
+
+            this.m_Gui2AddedItems = [];
+        }
+
+        var controls = this;
+
+        for(let i = 0; i < current.m_Children.length; i++)
+        {
+            var child = current.m_Children[i];
+
+            this.m_Gui2AddedItems.push(
+                this.m_Gui2.add(this, "GoTo")
+                .name(child.m_Name)
+                .onChange(
+                    function(planet = current, index2 = i)
+                    {
+                        controls.m_Camera.ViewMoon(planet, index2);
+                    }
+                )
+            );
+        }
+    }
     
     //The layout of the controls the user can use
     CreateGUI()
@@ -179,36 +232,24 @@ class Controls
         {
             var object = CelestrialObjects[i];
 
-            this.m_PlanetFolder.add(this,"GoTo")
+            this.m_Gui.add(this,"GoTo")
             .name(object.m_Name)
             .onChange(
                 function(index = i)
                 {
                     controls.m_Camera.ViewObject(index);
                 }
-            );
-
-            for(let j = 0; j < object.m_Children.length; j++)
-            {
-                var child = object.m_Children[j];
-
-                this.m_PlanetFolder.add(this, "GoTo")
-                .name(child.m_Name)
-                .onChange(
-                    function(index = i, index2 = j)
-                    {
-                        controls.m_Camera.ViewMoon(index, index2);
-                    }
-                );
-            }
+            ); 
         }
     
-        this.m_PlanetFolder.open();
-
         this.m_CameraFolder.add(this.m_Camera, "m_PanSpeed", .01, 10).name("Pan Speed");
         this.m_CameraFolder.add(this.m_Camera, "m_ZoomSpeed", 0.001, 10).name("Zoom Speed");
+        this.m_CameraFolder.open();
 
-        this.m_BasicFolder.add(this, "ToggleInfoDiv");  
+        this.m_Controls.add(this.m_Camera, "mResetButton").name("Reset");
+        this.m_Controls.add(this.m_Camera, "mPanMouseButton", { LMB : 0, MMB: 1}).name("Pan");
+        this.m_Controls.add(this.m_Camera, "mZoom", {ScrollWheel : "ScrollWheel"}).name("Zoom");
+        this.m_Controls.open();
     }
 }
 

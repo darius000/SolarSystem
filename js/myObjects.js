@@ -61,6 +61,11 @@ function RemoveFromArray(array, element)
   array.splice(index, 1);
 }
 
+function RemoveArrayIndex(array, index)
+{
+  array.splice(index, 1);
+}
+
 function ToRadians(degrees = 0.0)
 {
   return degrees * (Math.PI / 180.0)
