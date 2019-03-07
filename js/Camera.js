@@ -121,7 +121,7 @@ class CameraAim extends THREE.PerspectiveCamera
 
     SetDefaultPosition()
     {
-        this.mDefaultPosition.set(-this.m_CurrentPlanet.m_Diameter, 0, this.m_CurrentPlanet.m_Diameter);
+        this.mDefaultPosition.set(0, 0, this.m_CurrentPlanet.m_Diameter);
     }
 
 	Reset (event)
