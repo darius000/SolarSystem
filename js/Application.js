@@ -68,6 +68,8 @@ class Application
             this.m_Composer.addPass(renderScene);
             //this.m_Composer.addPass(bloomPass);
 
+            //new THREE.MapControls( this.m_CurrentScene.m_Camera, this.m_Renderer.domElement );
+
         }
     }
 
