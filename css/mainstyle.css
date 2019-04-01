@@ -1,0 +1,86 @@
+html,
+body {
+    margin: 0 auto;
+    width: 100%;
+    /*height: 100%;*/
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    overflow: hidden;
+}
+
+canvas {
+    margin: 0 auto;
+    padding: 0 auto;
+}
+
+p {
+    color: white;
+}
+
+a {
+    color: #fef298;
+}
+
+#Title {
+    position: fixed;
+    margin: 0 auto;
+    width: 100%;
+    text-align: center;
+    font-size: 36px;
+    color: white;
+}
+
+#Settings {
+    position: fixed;
+    margin: 0 auto;
+    width: 100%;
+    bottom: 5%;
+    padding: 0 auto;
+}
+
+#Planets {
+    margin: 0 auto;
+    position: fixed;
+    display: block;
+    top: 0px;
+}
+
+#Moons {
+    margin: 0 auto;
+    position: fixed;
+    display: block;
+    top: 0px;
+    width: 100%;
+}
+
+#Controls {
+    display: inline-block;
+}
+
+#Links {
+    text-align: right;
+    font-size: .8em;
+    float: right;
+    margin: 10px;
+    width: 500px;
+    height: auto;
+}
+
+#Links p {
+    padding: 3px;
+}
+
+#About {
+    display: none;
+    width: 1000px;
+    font-size: .6em;
+    text-align: left;
+    margin: 0 auto;
+    text-indent: 60px;
+    top: 60%;
+    left: 25%;
+    position: fixed;
+}
+
+strong {
+    color: rgb(124, 255, 107);
+}

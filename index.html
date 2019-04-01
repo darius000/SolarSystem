@@ -4,79 +4,30 @@
 <head>
     <meta charset="utf-8" />
     <title>Solar System</title>
+    <link rel="stylesheet" type="text/css" href="css/mainstyle.css">
     <link rel="icon" href="favicon/favicon.ico" type="image/x-icon" />
-    <style>
-        html,
-        body {
-            margin: 0 auto;
-            width: 100%;
-            height: 100%;
-            font-family: Verdana, Geneva, Tahoma, sans-serif;
-        }
-        
-        canvas {
-            width: 100%;
-            height: 100%;
-            margin: 0 auto;
-            padding: 0 auto;
-        }
-        
-        p {
-            color: white;
-        }
-        
-        a {
-            color: #fef298;
-        }
-        
-        #Title {
-            position: fixed;
-            margin: 0 auto;
-            width: 100%;
-            text-align: center;
-            font-size: 36px;
-            color: white;
-        }
-        
-        #Settings {
-            position: fixed;
-            margin: 0 auto;
-            width: 100%;
-            bottom: 2%;
-            padding: 0 auto;
-        }
-        
-        #Planets {
-            margin: 0 auto;
-            position: fixed;
-            display: block;
-            top: 0px;
-        }
-        
-        #Moons {
-            margin: 0 auto;
-            position: fixed;
-            display: block;
-            top: 0px;
-            width: 100%;
-        }
-        
-        #Controls {
-            display: inline-block;
-        }
-        
-        #Links {
-            text-align: right;
-            font-size: .7em;
-            display: inline-block;
-            float: right;
-        }
-    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
+
+<script>
+    $(document).ready(
+        function() {
+            $("#AboutButton").click(
+                function() {
+                    $("#About").toggle();
+                })
+        })
+</script>
 
 <body oncontextmenu="return false;">
     <div id="Title">
         <p>Solar System</p>
+        <div id="About">
+            <p>This is a side project using Three.js (JavaScript library for webGL ). This project is a small display of our Solar System with only a few satellites of each planet added (hope to add more in the future). The user can view each planet and
+                its satellites by selecting it from the User Interface (UI). The satellites are shown on the UI only if the number of satellites of a planet is greater than 0. The user can rotate the view around the object, as well as zoom in and out
+                and pan. You can reset the view if the object is out of focus, the controls are displayed and can be changed on the left hand side of the document. By default the controls are:
+                <strong>f</strong> resets the view back to its default, use <strong>scroll</strong> to zoom in and out the camera, <strong>hold middle click</strong> to pan the camera, and <strong>hold right click</strong> rotates the camera.</p>
+        </div>
     </div>
     <div id="Planets"></div>
     <div id="Moons"></div>
@@ -85,9 +36,13 @@
 
         </div>
         <div id="Links">
-            <p>Source Textures</p>
-            <p><a href="http://bit.ly/2E7jD1U">Planet Textures</a></p>
-            <p><a href="http://bit.ly/2FQFmM8">Ring Textures</a></p>
+            <div>
+                <p>Source Textures</p>
+                <p><a href="http://bit.ly/2E7jD1U">Planet Textures</a></p>
+                <p><a href="http://bit.ly/2FQFmM8">Ring Textures</a></p>
+                <p><button id="AboutButton">Show About and Controls</button></p>
+            </div>
+
         </div>
     </div>
     <script type="text/javascript" src="js/threex.atmospherematerial.js"></script>
@@ -100,7 +55,6 @@
     <script type="text/javascript" src="js/CopyShader.js"></script>
     <script type="text/javascript" src="js/LuminosityHighPassShader.js"></script>
     <script type="text/javascript" src="js/UnrealBloomPass.js"></script>
-    <!--<script src="js/MapControls.js"></script>-->
     <script type="text/javascript" src="js/Input.js"></script>
     <script type="text/javascript" src="js/Loaders/OBJLoader.js"></script>
     <script type="text/javascript" src="js/myObjects.js"></script>
