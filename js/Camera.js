@@ -1,41 +1,37 @@
 //Javascript source code
 
-class CameraAim extends THREE.PerspectiveCamera
-{
-    constructor(fov = 35, aspect = 16/9, near = .01, far = 1000, target = new THREE.Vector3())
-    {
+class CameraAim extends THREE.PerspectiveCamera {
+    constructor(fov = 75, aspect = 16 / 9, near = .01, far = 1000, target = new THREE.Vector3()) {
         super(fov, aspect, near, far);
-        this.m_PanSpeed     = .1;
-        this.m_ZoomSpeed    = 0.01;
-	this.m_CurrentRotation  = 0;
-	this.mRotationSteps = 1.0;
+        this.m_PanSpeed = 0.001;
+        this.m_ZoomSpeed = 0.001;
+        this.m_CurrentRotation = 0.0;
+        this.mRotationSteps = 0.001;
         this.m_CurrentPlanet = null;
         this.m_PreviousPlanet = null;
         this.m_LookPosition = new THREE.Vector3();
-        this.m_Target       = target;
-        this.m_Helper       = new THREE.CameraHelper(this);
-        this.mResetButton   = "f";
+        this.m_Target = target;
+        this.m_Helper = new THREE.CameraHelper(this);
+        this.mResetButton = "f";
         this.mPanMouseButton = 1;
-	this.mRotateMouseButton = 0;
-        this.mZoom    = "ScrollWheel";
+        this.mRotateMouseButton = 2;
+        this.mZoom = "ScrollWheel";
         this.mDefaultPosition = new THREE.Vector3();
 
         this.UpdateTarget();
-        
+
         document.addEventListener('OnMouseMoved', this.Pan.bind(this), false);
-	document.addEventListener('OnMouseMoved', this.Rotate.bind(this), false);
+        document.addEventListener('OnMouseMoved', this.Rotate.bind(this), false);
         document.addEventListener('OnMouseScrolled', this.Zoom.bind(this), false);
         document.addEventListener('OnKeyPressed', this.Reset.bind(this), false);
-    } 
+    }
 
-    ShowCameraHelpers()
-    {
+    ShowCameraHelpers() {
         this.add(this.m_Helper);
     }
 
     //Set the look at target
-    SetTarget(target = new THREE.Vector3())
-    {
+    SetTarget(target = new THREE.Vector3()) {
         this.m_Target = target;
         this.UpdateTarget();
 
@@ -43,99 +39,91 @@ class CameraAim extends THREE.PerspectiveCamera
     }
 
     //look attarget and update projection
-    UpdateTarget()
-    {
+    UpdateTarget() {
         this.lookAt(this.m_Target);
         this.updateProjectionMatrix();
     }
 
     //Pan the camera
-    Pan(event) 
-    {
-    	var forward = new THREE.Vector3();
+    Pan(event) {
+        var forward = new THREE.Vector3();
         this.getWorldDirection(forward);
-	    
-		var up = new THREE.Vector3(0, 1, 0);
-	    
-		var right = new THREE.Vector3();
-		right.crossVectors(forward, up);
-	    
-	//this.m_Target = forward.multiplyScalar(10);
-	    
-        if(Input.GetMouseButtonDown() == this.mPanMouseButton)
-        {
-            if(event.detail.position.x > 0)
+
+        var up = new THREE.Vector3(0, 1, 0);
+
+        var right = new THREE.Vector3();
+        right.crossVectors(forward, up);
+
+        //this.m_Target = forward.multiplyScalar(10);
+
+        if (Input.GetMouseButtonDown() == this.mPanMouseButton) {
+            if (event.detail.position.x > 0)
                 this.position.add(right.multiplyScalar(this.m_PanSpeed));
 
-            else if(event.detail.position.x < 0)
+            else if (event.detail.position.x < 0)
                 this.position.add(right.multiplyScalar(-this.m_PanSpeed));
-            
-            if(event.detail.position.y > 0)
+
+            if (event.detail.position.y > 0)
                 this.position.add(up.multiplyScalar(this.m_PanSpeed));
 
-            else if(event.detail.position.y < 0)
+            else if (event.detail.position.y < 0)
                 this.position.add(up.multiplyScalar(-this.m_PanSpeed));
-		
-			//console.log(right.multiplyScalar(this.m_PanSpeed));
-			//console.log(up.multiplyScalar(this.m_PanSpeed));
-			//console.log(this.position);
-	    	this.updateProjectionMatrix();
-          	//this.UpdateTarget();
+
+            //console.log(right.multiplyScalar(this.m_PanSpeed));
+            //console.log(up.multiplyScalar(this.m_PanSpeed));
+            //console.log(this.position);
+            this.updateProjectionMatrix();
+            //this.UpdateTarget();
         }
     }
 
-    Zoom(event) 
-    {
+    Zoom(event) {
         var delta = this.m_ZoomSpeed * event.detail.delta;
 
         var forward = new THREE.Vector3();
         this.getWorldDirection(forward);
-	
-	    this.position.add(forward.multiplyScalar(-delta));
-		this.position.clampLength(this.m_CurrentPlanet.m_Diameter, this.position.length() ); 
-		
-		this.UpdateTarget();
-    }
-	
-	Rotate(event)
-	{
-		if(Input.GetMouseButtonDown() == this.mRotateMouseButton)
-        {
-			var newposition = new THREE.Vector3(this.position.length() * Math.cos(ToRadians(this.m_CurrentRotation)), 0,this.position.length() * Math.sin(ToRadians(this.m_CurrentRotation)));
-			
-			//console.log(newposition);
-			
-			if(event.detail.position.x > 0)
-				this.m_CurrentRotation += this.mRotationSteps;         
 
-            else if(event.detail.position.x < 0)
-				this.m_CurrentRotation -= this.mRotationSteps;
-          	
-			this.position.copy(newposition);
-			
-			//console.log(this.position);
-       
-			this.UpdateTarget();
-		}
-	}
+        this.position.add(forward.multiplyScalar(delta));
+        this.position.clampLength(this.m_CurrentPlanet.m_Diameter, this.position.length());
 
-    SetDefaultPosition()
-    {
-        this.mDefaultPosition.set(0, 0, this.m_CurrentPlanet.m_Diameter + ( this.m_CurrentPlanet.m_Diameter * 0.2));
+        this.UpdateTarget();
     }
 
-	Reset (event)
-	{
-        if(event.detail.key == this.mResetButton)
-        {
+    Rotate(event) {
+        if (Input.GetMouseButtonDown() == this.mRotateMouseButton) {
+            //console.log(this.position);
+
+            var newposition = new THREE.Vector3(this.position.length() * Math.sin(ToRadians(this.m_CurrentRotation)), 0, this.position.length() * Math.cos(ToRadians(this.m_CurrentRotation)));
+
+            //console.log(newposition);
+
+            if (event.detail.position.x > 0)
+                this.m_CurrentRotation += this.mRotationSteps;
+
+            else if (event.detail.position.x < 0)
+                this.m_CurrentRotation -= this.mRotationSteps;
+
+            this.position.copy(newposition);
+
+            //console.log(this.position);
+
+            this.UpdateTarget();
+        }
+    }
+
+    SetDefaultPosition() {
+        this.mDefaultPosition.set(0, 0, this.m_CurrentPlanet.m_Diameter + (this.m_CurrentPlanet.m_Diameter * 0.2));
+    }
+
+    Reset(event) {
+        if (event.detail.key == this.mResetButton) {
             this.position.copy(this.mDefaultPosition);
 
             this.SetTarget(this.m_LookPosition);
         }
     }
 
-    ViewObject(index)
-    {
+    ViewObject(index) {
         var object = CelestrialObjects[index];
 
         this.m_CurrentPlanet = object;
@@ -143,8 +131,7 @@ class CameraAim extends THREE.PerspectiveCamera
 
         this.SetDefaultPosition();
 
-        if(this.parent)
-        {
+        if (this.parent) {
             this.parent.remove(this);
         }
 
@@ -156,24 +143,22 @@ class CameraAim extends THREE.PerspectiveCamera
 
         OnSelectPlanet(this.m_PreviousPlanet, this.m_CurrentPlanet);
 
-        this.m_PreviousPlanet = object;    
-        
-        
+        this.m_PreviousPlanet = object;
+
+
     }
 
-    ViewMoon(CelestrialObject, index2)
-    {
-  
-        var child       = CelestrialObject.GetChild(index2);
-        var position    = CelestrialObject.GetChildPosition(index2);
+    ViewMoon(CelestrialObject, index2) {
+
+        var child = CelestrialObject.GetChild(index2);
+        var position = CelestrialObject.GetChildPosition(index2);
 
         this.m_CurrentPlanet = child;
         this.m_LookPosition = position;
 
         this.SetDefaultPosition();
 
-        if(this.parent)
-        {
+        if (this.parent) {
             this.parent.remove(this);
         }
 
@@ -185,11 +170,9 @@ class CameraAim extends THREE.PerspectiveCamera
     }
 };
 
-function OnSelectPlanet(previous, current)
-{
+function OnSelectPlanet(previous, current) {
     const event = new CustomEvent('OnSelectPlanet', {
-        detail:
-        {
+        detail: {
             previousPlanet: previous,
             selectedPlanet: current
         }
