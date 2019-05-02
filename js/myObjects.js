@@ -67,7 +67,7 @@ class CelestrialBody extends THREE.Object3D {
         this.m_Children = [];
         CelestrialObjects.push(this);
         this.m_CurrentRotation = 0.0;
-        //this.arrow;
+        this.arrow;
 
     }
 
@@ -88,8 +88,8 @@ class CelestrialBody extends THREE.Object3D {
 
         this.position.set(this.m_Distance, 0, 0);
 
-        //this.arrow = new THREE.ArrowHelper(new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, 0, 0), 1, 0xff5500);
-        //this.add(this.arrow);
+        this.arrow = new THREE.ArrowHelper(new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, 0, 0), 1, 0xff5500);
+        this.add(this.arrow);
 
         for (let i = 0; i < this.m_Children.length; i++) {
             this.m_Children[i].Init();
