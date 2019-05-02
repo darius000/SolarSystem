@@ -67,6 +67,8 @@ class CelestrialBody extends THREE.Object3D {
         this.m_Children = [];
         CelestrialObjects.push(this);
         this.m_CurrentRotation = 0.0;
+        //this.arrow;
+
     }
 
     Name() {
@@ -85,6 +87,9 @@ class CelestrialBody extends THREE.Object3D {
         this.add(this.m_Mesh);
 
         this.position.set(this.m_Distance, 0, 0);
+
+        //this.arrow = new THREE.ArrowHelper(new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, 0, 0), 1, 0xff5500);
+        //this.add(this.arrow);
 
         for (let i = 0; i < this.m_Children.length; i++) {
             this.m_Children[i].Init();
@@ -111,18 +116,21 @@ class CelestrialBody extends THREE.Object3D {
     Revolve(DeltaTime) {
         this.m_CurrentRotation += DeltaTime;
 
-        var newposition = new THREE.Vector3();
+        // var newposition = new THREE.Vector3();
 
 
-        if (this.parent instanceof Planet) {
-            newposition.set(this.GetDistance() * Math.sin(ToRadians(this.m_CurrentRotation) + this.parent.GetDistance()), 0, this.GetDistance() * Math.cos(ToRadians(this.m_CurrentRotation) + this.parent.GetDistance()));
-        } else {
-            newposition.set(this.GetDistance() * Math.sin(ToRadians(this.m_CurrentRotation)), 0, this.GetDistance() * Math.cos(ToRadians(this.m_CurrentRotation)));
-        }
+        // if (this.parent instanceof Planet) {
+        //     this.position.set(this.GetDistance() * Math.sin(ToRadians(this.m_CurrentRotation) + this.parent.GetDistance()), 0, this.GetDistance() * Math.cos(ToRadians(this.m_CurrentRotation) + this.parent.GetDistance()));
+        // } else {
+        //     this.position.set(this.GetDistance() * Math.sin(ToRadians(this.m_CurrentRotation)), 0, this.GetDistance() * Math.cos(ToRadians(this.m_CurrentRotation)));
+        // }
+
+        this.position.set(this.GetDistance() * Math.sin(ToRadians(this.m_CurrentRotation)), 0, this.GetDistance() * Math.cos(ToRadians(this.m_CurrentRotation)));
+        //newposition.set(this.GetDistance() * Math.sin(ToRadians(this.m_CurrentRotation)), 0, this.GetDistance() * Math.cos(ToRadians(this.m_CurrentRotation)));
 
         //console.log(newposition);
 
-        this.position.copy(newposition);
+        //this.position.copy(newposition);
     }
 
     Update(DeltaTime) {
@@ -132,6 +140,7 @@ class CelestrialBody extends THREE.Object3D {
         for (let i = 0; i < this.m_Children.length; ++i) {
             this.m_Children[i].Update(DeltaTime);
         }
+        //this.arrow.position.copy(this.position);
     }
 
     ImportMesh(path = "") {

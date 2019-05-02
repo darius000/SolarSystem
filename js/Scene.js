@@ -129,6 +129,7 @@ class SolarSystem extends Scene {
         this.m_Controls.CreateGUI();
 
         this.m_Camera.ViewObject(3);
+        this.m_Camera.ResetView();
 
     }
 

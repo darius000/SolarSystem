@@ -14,8 +14,9 @@ class CameraAim extends THREE.PerspectiveCamera {
         this.m_Helper = new THREE.CameraHelper(this);
         this.mResetButton = "f";
         this.mPanMouseButton = 1;
-        this.mRotateMouseButton = 2;
+        this.mRotateMouseButton = 0;
         this.mZoom = "ScrollWheel";
+        this.mZoomScale = 1.0;
         this.mDefaultPosition = new THREE.Vector3();
 
         this.UpdateTarget();
@@ -32,7 +33,11 @@ class CameraAim extends THREE.PerspectiveCamera {
 
     //Set the look at target
     SetTarget(target = new THREE.Vector3()) {
-        this.m_Target = target;
+        if (this.m_CurrentPlanet)
+            this.m_Target = this.m_CurrentPlanet.GetPosition();
+        else
+            this.m_Target = target;
+
         this.UpdateTarget();
 
         //console.log(this.m_Target.position);
@@ -40,7 +45,11 @@ class CameraAim extends THREE.PerspectiveCamera {
 
     //look attarget and update projection
     UpdateTarget() {
-        this.lookAt(this.m_Target);
+        if (this.m_CurrentPlanet)
+            this.lookAt(this.m_CurrentPlanet.GetPosition());
+        else
+            this.lookAt(this.m_Target);
+
         this.updateProjectionMatrix();
     }
 
@@ -78,7 +87,7 @@ class CameraAim extends THREE.PerspectiveCamera {
     }
 
     Zoom(event) {
-        var delta = this.m_ZoomSpeed * event.detail.delta;
+        var delta = this.m_ZoomSpeed * this.mZoomScale * event.detail.delta;
 
         var forward = new THREE.Vector3();
         this.getWorldDirection(forward);
@@ -96,9 +105,6 @@ class CameraAim extends THREE.PerspectiveCamera {
     Rotate(event) {
         if (Input.GetMouseButtonDown() == this.mRotateMouseButton) {
             //console.log(this.position);
-
-            var newposition = new THREE.Vector3(this.position.length() * Math.sin(ToRadians(this.m_CurrentRotation)), 0, this.position.length() * Math.cos(ToRadians(this.m_CurrentRotation)));
-
             //console.log(newposition);
 
             if (event.detail.position.x > 0)
@@ -106,6 +112,8 @@ class CameraAim extends THREE.PerspectiveCamera {
 
             else if (event.detail.position.x < 0)
                 this.m_CurrentRotation -= this.mRotationSteps;
+
+            var newposition = new THREE.Vector3(this.position.length() * Math.sin(ToRadians(this.m_CurrentRotation)), 0, -this.position.length() * Math.cos(ToRadians(this.m_CurrentRotation)));
 
             this.position.copy(newposition);
 
@@ -116,14 +124,25 @@ class CameraAim extends THREE.PerspectiveCamera {
     }
 
     SetDefaultPosition() {
-        this.mDefaultPosition.set(-2, 0, this.m_CurrentPlanet.m_Diameter + (this.m_CurrentPlanet.m_Diameter * 0.2));
+        this.mDefaultPosition.set(0, 0, -1.0 * (this.m_CurrentPlanet.m_Diameter + (this.m_CurrentPlanet.m_Diameter * .2)));
+        this.mZoomScale = this.m_CurrentPlanet.m_Diameter;
+    }
+
+    ResetView() {
+        this.position.copy(this.mDefaultPosition);
+
+        this.SetTarget(this.m_LookPosition);
+
+        this.m_CurrentRotation = 0.0;
     }
 
     Reset(event) {
         if (event.detail.key == this.mResetButton) {
-            this.position.copy(this.mDefaultPosition);
+            //this.SetDefaultPosition();
 
-            this.SetTarget(this.m_LookPosition);
+            //console.log(this.mDefaultPosition);
+
+            this.ResetView();
         }
     }
 
@@ -141,9 +160,10 @@ class CameraAim extends THREE.PerspectiveCamera {
 
         object.add(this);
 
-        this.position.copy(this.mDefaultPosition);
+        this.ResetView();
+        //this.position.setLength((this.m_CurrentPlanet.m_Diameter + (this.m_CurrentPlanet.m_Diameter * .2)));
+        //this.SetTarget(this.m_LookPosition);
 
-        this.SetTarget(object.position);
 
         OnSelectPlanet(this.m_PreviousPlanet, this.m_CurrentPlanet);
 
@@ -155,10 +175,10 @@ class CameraAim extends THREE.PerspectiveCamera {
     ViewMoon(CelestrialObject, index2) {
 
         var child = CelestrialObject.GetChild(index2);
-        var position = CelestrialObject.GetChildPosition(index2);
+        //var position = CelestrialObject.GetChildPosition(index2);
 
         this.m_CurrentPlanet = child;
-        this.m_LookPosition = position;
+        this.m_LookPosition = child.GetPosition();
 
         this.SetDefaultPosition();
 
@@ -168,9 +188,16 @@ class CameraAim extends THREE.PerspectiveCamera {
 
         child.add(this);
 
-        this.position.copy(this.mDefaultPosition);
+        this.ResetView();
+        //this.position.setLength((this.m_CurrentPlanet.m_Diameter + (this.m_CurrentPlanet.m_Diameter * .2)));
+        //this.SetTarget(this.m_LookPosition);
 
-        this.SetTarget(position);
+
+        OnSelectPlanet(this.m_PreviousPlanet, this.m_CurrentPlanet);
+
+        this.m_PreviousPlanet = child;
+
+        //console.log(this.mDefaultPosition);
     }
 };
 
