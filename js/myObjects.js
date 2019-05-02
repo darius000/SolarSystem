@@ -332,3 +332,7 @@ class Planet extends CelestrialBody {
         this.add(atmosphere);
     }
 }
+
+class Moon extends Planet {
+
+}

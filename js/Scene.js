@@ -21,7 +21,7 @@ earth.Atmosphere(0xc8fbff);
 earth.Clouds("tex/earth/earthclouds.png", "tex/earth/earthclouds.png");
 earth.SetCloudsSpeed(75.0);
 
-var moon = new Planet("Moon", 3476, 384403, 29.5, 29, 29);
+var moon = new Moon("Moon", 3476, 384403, 29.5, 29, 29);
 moon.SetTextures("tex/earth/moon/moonmap.jpg", "tex/earth/moon/moonnormal.jpg", "");
 
 earth.AddChild(moon);
@@ -32,12 +32,12 @@ mars.Atmosphere(0xddaaaa);
 mars.Clouds("tex/mars/marsclouds.png", "tex/mars/marsclouds.png");
 mars.SetCloudsSpeed(20.0);
 
-var phobos = new Planet("Pbobos", 22.2, 9380, 0, 7, 7.68);
+var phobos = new Moon("Pbobos", 22.2, 9380, 0, 7, 7.68);
 phobos.SetTextures("tex/mars/phobos/phobosbump.jpg", "", "");
 phobos.ImportMesh("mesh/phobos/phobos.obj");
 mars.AddChild(phobos);
 
-var diemos = new Planet("Diemos", 11, 23460, 0, 6, 6);
+var diemos = new Moon("Diemos", 11, 23460, 0, 6, 6);
 diemos.SetTextures("tex/mars/diemos/deimosbump.jpg", "", "");
 diemos.ImportMesh("mesh/deimos/deimos.obj");
 mars.AddChild(diemos);
@@ -46,7 +46,7 @@ var jupiter = new Planet("Jupiter", 142984, 778300000, 3.0, .41, 4331.5);
 jupiter.SetTextures("tex/jupiter/jupitermap.jpg", "", "");
 jupiter.Rings(0, 128000, "tex/jupiter/jupiterrings.png", "tex/jupiter/jupiterrings.png");
 
-var IO = new Planet("IO", 2262, 421800, 0, 42.5, 42.5);
+var IO = new Moon("IO", 2262, 421800, 0, 42.5, 42.5);
 IO.SetTextures("tex/jupiter/IO/Io.png", "tex/jupiter/IO/IoNormal.jpg", "");
 jupiter.AddChild(IO);
 
@@ -55,7 +55,7 @@ saturn.SetTextures("tex/saturn/saturnmap.png", "", "");
 saturn.Atmosphere(0xDDDDFF);
 saturn.Rings(0, 140000, "tex/saturn/saturnrings.png", "tex/saturn/saturnrings.png");
 
-var titan = new Planet("Titan", 5150, 1221850, 0, 15, 15);
+var titan = new Moon("Titan", 5150, 1221850, 0, 15, 15);
 titan.SetTextures("tex/saturn/titan/titan.jpg", "", "");
 
 saturn.AddChild(titan);
@@ -64,7 +64,7 @@ var uranus = new Planet("Uranus", 51118, 2900000000, 97.77, .7, 42877);
 uranus.SetTextures("tex/uranus/uranusmap.jpg", "", "");
 uranus.Rings(0, 51000, "tex/uranus/uranusrings.png", "tex/uranus/uranusrings.png");
 
-var Miranda = new Planet("Miranda", 470, 129390, 0, 33.6, 33.6);
+var Miranda = new Moon("Miranda", 470, 129390, 0, 33.6, 33.6);
 Miranda.SetTextures("tex/uranus/miranda/miranda3.jpg", "", "");
 uranus.AddChild(Miranda);
 
@@ -72,14 +72,14 @@ var neptune = new Planet("Neptune", 49528, 4500000000, 28.32, .6, 60148.35);
 neptune.SetTextures("tex/neptune/neptunemap.jpg", "", "");
 neptune.Rings(0, 63000, "tex/neptune/neptunerings.png", "tex/neptune/neptunerings.png");
 
-var Triton = new Planet("Triton", 2710, 354759, 0, 141, 678);
+var Triton = new Moon("Triton", 2710, 354759, 0, 141, 678);
 Triton.SetTextures("tex/neptune/triton.jpg", "", "");
 neptune.AddChild(Triton);
 
 var pluto = new Planet("Pluto", 2306, 5900000000, 119.61, 6.4, 90461.6);
 pluto.SetTextures("tex/pluto/pluto.jpg", "", "");
 
-var Charon = new Planet("Charon", 1212, 19570, 0, 6.387, 6.387);
+var Charon = new Moon("Charon", 1212, 19570, 0, 6.387, 6.387);
 Charon.SetTextures("tex/pluto/charon/charon.jpg", "", "");
 
 pluto.AddChild(Charon);
@@ -185,15 +185,18 @@ class Controls {
         var previous = event.detail.previousPlanet;
         var current = event.detail.selectedPlanet;
 
-        // console.log(event);
+        var isMoon = (current instanceof Moon);
 
-        if (previous != null) {
+        //console.log(isMoon);
+        //console.log(previous);
+
+        if (previous != null && isMoon === false) {
             //console.log(previous);
 
             //console.log(previous.m_Children.length);
 
-            for (let k = 0; k < previous.m_Children.length; k++) {
-                var child = previous.m_Children[k];
+            for (let k = 0; k < this.m_Gui2AddedItems.length; k++) {
+                //var child = previous.m_Children[k];
 
                 //console.log(this.m_Gui2AddedItems[k]);
 
