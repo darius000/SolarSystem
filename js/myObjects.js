@@ -1,4 +1,5 @@
 // JavaScript source code
+/////<reference path ="ParticleSystem.js" />
 
 var CelestrialObjects = [];
 var TextureLoader = new THREE.TextureLoader();
@@ -51,15 +52,11 @@ function RemoveArrayIndex(array, index) {
     array.splice(index, 1);
 }
 
-function ToRadians(degrees = 0.0) {
-    return degrees * (Math.PI / 180.0)
-}
-
 class CelestrialBody extends THREE.Object3D {
     constructor(name = "", diameter = 0.0, distance = 0.0) {
         super();
 
-        this.m_Name = name;
+        this.name = name;
         this.m_Distance = (distance / EarthDiameter);
         this.m_Diameter = (diameter / EarthDiameter);
         this.m_Radius = this.m_Diameter / 2.0;
@@ -67,12 +64,12 @@ class CelestrialBody extends THREE.Object3D {
         this.m_Children = [];
         CelestrialObjects.push(this);
         this.m_CurrentRotation = 0.0;
-        this.arrow;
+        //this.arrow;
 
     }
 
-    Name() {
-        return this.m_Name;
+    GetName() {
+        return this.name;
     }
 
     Children() {
@@ -88,12 +85,16 @@ class CelestrialBody extends THREE.Object3D {
 
         this.position.set(this.m_Distance, 0, 0);
 
-        this.arrow = new THREE.ArrowHelper(new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, 0, 0), 1, 0xff5500);
-        this.add(this.arrow);
+        //this.arrow = new THREE.ArrowHelper(new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, 0, 0), 1, 0xff5500);
+        //this.add(this.arrow);
 
         for (let i = 0; i < this.m_Children.length; i++) {
             this.m_Children[i].Init();
         }
+
+        //console.log(this.name + ": initialized");
+        //console.log(this.m_Distance);
+        //console.log(this.position);
     }
 
     GetPosition() {
@@ -109,38 +110,22 @@ class CelestrialBody extends THREE.Object3D {
         return this.m_Distance;
     }
 
-    Rotate(DeltaTime) {
+    Rotate(deltaTime, time) {
 
     }
 
-    Revolve(DeltaTime) {
-        this.m_CurrentRotation += DeltaTime;
+    Revolve(deltaTime, time) {
 
-        // var newposition = new THREE.Vector3();
-
-
-        // if (this.parent instanceof Planet) {
-        //     this.position.set(this.GetDistance() * Math.sin(ToRadians(this.m_CurrentRotation) + this.parent.GetDistance()), 0, this.GetDistance() * Math.cos(ToRadians(this.m_CurrentRotation) + this.parent.GetDistance()));
-        // } else {
-        //     this.position.set(this.GetDistance() * Math.sin(ToRadians(this.m_CurrentRotation)), 0, this.GetDistance() * Math.cos(ToRadians(this.m_CurrentRotation)));
-        // }
-
-        this.position.set(this.GetDistance() * Math.sin(ToRadians(this.m_CurrentRotation)), 0, this.GetDistance() * Math.cos(ToRadians(this.m_CurrentRotation)));
-        //newposition.set(this.GetDistance() * Math.sin(ToRadians(this.m_CurrentRotation)), 0, this.GetDistance() * Math.cos(ToRadians(this.m_CurrentRotation)));
-
-        //console.log(newposition);
-
-        //this.position.copy(newposition);
     }
 
-    Update(DeltaTime) {
+    Update(deltaTime, time) {
 
-        this.Rotate(DeltaTime);
-        this.Revolve(DeltaTime);
+        this.Rotate(deltaTime, time);
+        this.Revolve(deltaTime, time);
+        this.RenderOrbit(deltaTime, time);
         for (let i = 0; i < this.m_Children.length; ++i) {
-            this.m_Children[i].Update(DeltaTime);
+            this.m_Children[i].Update(deltaTime, time);
         }
-        //this.arrow.position.copy(this.position);
     }
 
     ImportMesh(path = "") {
@@ -162,7 +147,7 @@ class CelestrialBody extends THREE.Object3D {
         }
     }
 
-    RenderOrbit(scene = new THREE.Scene()) {
+    RenderOrbit(DeltaTime, time) {
 
     }
 
@@ -208,10 +193,11 @@ class Star extends CelestrialBody {
         this.pointLight.shadow.mapSize = new THREE.Vector2(1024, 1024);
         this.pointLight.shadow.bias = 0.05;
         this.pointLightHelper = new THREE.PointLightHelper(
-            this.pointLight,
-            1.0,
-            0xffffff
-        )
+                this.pointLight,
+                1.0,
+                0xffffff
+            )
+            //this.particleSystem = ParticleSystem;
     }
 
     Init() {
@@ -219,13 +205,33 @@ class Star extends CelestrialBody {
         this.m_Mesh.castShadow = false;
         this.add(this.pointLightHelper);
         this.add(this.pointLight);
-
+        //this.add(this.particleSystem);
         super.Init();
     }
 
     SetEmission(color = new THREE.Color("rgb(255, 255, 255)"), emissive = "") {
         this.m_Mesh.material.emissive = color;
         LoadTexture(emissive, Textures.EMISSIVE, this.m_Mesh.material);
+    }
+
+    Update(deltaTime, time) {
+        super.Update(deltaTime, time);
+        // this.particleSystem.rotation.y += .01;
+
+        // var pCount = particlecount;
+        // while (pCount--) {
+        //     var particle = particles.vertices[pCount];
+
+        //     if (particle.y < -200) {
+        //         particle.y = 200;
+        //         particle.velocity.y = 0;
+        //     }
+
+        //     particle.velocity.y -= Math.random() * 9.81;
+        //     particle.add(particle.velocity);
+
+        //     this.particleSystem.geometry.verticesNeedUpdate = true;
+        // }
     }
 }
 
@@ -254,7 +260,7 @@ class Planet extends CelestrialBody {
 
     }
 
-    Rotate(DeltaTime) {
+    Rotate(DeltaTime, time) {
         super.Rotate(DeltaTime);
 
         if (this.day > 0) {
@@ -335,4 +341,8 @@ class Planet extends CelestrialBody {
 
 class Moon extends Planet {
 
+    Revolve(DeltaTime, time) {
+        this.m_CurrentRotation += DeltaTime;
+        this.position.set(this.GetDistance() * Math.sin(ToRadians(this.m_CurrentRotation)), 0, this.GetDistance() * Math.cos(ToRadians(this.m_CurrentRotation)));
+    }
 }

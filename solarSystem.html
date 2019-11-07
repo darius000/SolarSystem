@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Solar System</title>
+    <link rel="stylesheet" type="text/css" href="css/mainstyle.css">
+    <link rel="icon" href="favicon/favicon.ico" type="image/x-icon" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+
+<script>
+    $(document).ready(
+        function() {
+            $("#AboutButton").click(
+                function() {
+                    $("#About").toggle();
+                })
+        })
+</script>
+
+<body oncontextmenu="return false;">
+    <div id="Title">
+        <p>Solar System</p>
+        <div id="About">
+            <p>This is a side project using Three.js (JavaScript library for webGL ). This project is a small display of our Solar System with only a few satellites of each planet added (hope to add more in the future). The user can view each planet and
+                its satellites by selecting it from the User Interface (UI). The satellites are shown on the UI only if the number of satellites of a planet is greater than 0. The user can rotate the view around the object, as well as zoom in and out
+                and pan. You can reset the view if the object is out of focus, the controls are displayed and can be changed on the left hand side of the document. By default the controls are:
+                <strong>f</strong> resets the view back to its default, use <strong>scroll</strong> to zoom in and out the camera, <strong>hold middle click</strong> to pan the camera, and <strong>hold left click</strong> rotates the camera.</p>
+        </div>
+    </div>
+    <!--<div id="SmallViewport"></div>-->
+    <div id="Planets"></div>
+    <div id="Moons"></div>
+    <div id="Settings">
+        <div id="Controls">
+
+        </div>
+        <div id="Links">
+            <div>
+                <p>Source Textures</p>
+                <p><a href="http://bit.ly/2E7jD1U">Planet Textures</a></p>
+                <p><a href="http://bit.ly/2FQFmM8">Ring Textures</a></p>
+                <p><button id="AboutButton">Show About and Controls</button></p>
+            </div>
+
+        </div>
+    </div>
+    <script type="text/javascript" src="js/threex.atmospherematerial.js"></script>
+    <script type="text/javascript" src="js/three.js"></script>
+    <script type="text/javascript" src="js/three.min.js"></script>
+    <script type="text/javascript" src="js/dat.gui.js"></script>
+    <script type="text/javascript" src="js/EffectComposer.js"></script>
+    <script type="text/javascript" src="js/RenderPass.js"></script>
+    <script type="text/javascript" src="js/ShaderPass.js"></script>
+    <script type="text/javascript" src="js/CopyShader.js"></script>
+    <script type="text/javascript" src="js/LuminosityHighPassShader.js"></script>
+    <script type="text/javascript" src="js/UnrealBloomPass.js"></script>
+    <script type="text/javascript" src="js/mathfunc.js"></script>
+    <script type="text/javascript" src="js/Input.js"></script>
+    <script type="text/javascript" src="js/Loaders/OBJLoader.js"></script>
+    <script type="text/javascript " src="js/ParticleSystem.js "></script>
+    <script type="text/javascript" src="js/myObjects.js"></script>
+    <script type="text/javascript" src="js/Camera.js"></script>
+    <script type="text/javascript " src="js/Scene.js "></script>
+    <script type="text/javascript " src="js/scenes/SolarSystemScene.js "></script>
+    <script type="text/javascript " src="js/scenes/GravityTestScene.js "></script>
+    <script type="text/javascript " src="js/Application.js "></script>
+
+
+    <script>
+        var solarSystem = new SolarSystem();
+        var App = new Application();
+        App.Init();
+        App.AddScene(solarSystem);
+        App.Render();
+    </script>
+
+</body>
+
+</html>

@@ -81,6 +81,20 @@ a {
     position: fixed;
 }
 
+#SmallViewport {
+    display: block;
+    width: 600px;
+    height: 400px;
+    margin: 0 auto;
+    top: 20%;
+    right: 0;
+    position: fixed;
+}
+
 strong {
     color: rgb(124, 255, 107);
+}
+
+#Scenes a {
+    color: rgb(0, 0, 0);
 }

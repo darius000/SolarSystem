@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Gravity Test</title>
+    <link rel="stylesheet" type="text/css" href="css/mainstyle.css">
+    <link rel="icon" href="favicon/favicon.ico" type="image/x-icon" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+
+
+<body oncontextmenu="return false;">
+    <div id="Settings">
+        <div id="Controls">
+
+        </div>
+    </div>
+    <script type="text/javascript" src="js/threex.atmospherematerial.js"></script>
+    <script type="text/javascript" src="js/three.js"></script>
+    <script type="text/javascript" src="js/three.min.js"></script>
+    <script type="text/javascript" src="js/dat.gui.js"></script>
+    <script type="text/javascript" src="js/EffectComposer.js"></script>
+    <script type="text/javascript" src="js/RenderPass.js"></script>
+    <script type="text/javascript" src="js/ShaderPass.js"></script>
+    <script type="text/javascript" src="js/CopyShader.js"></script>
+    <script type="text/javascript" src="js/LuminosityHighPassShader.js"></script>
+    <script type="text/javascript" src="js/UnrealBloomPass.js"></script>
+    <script type="text/javascript" src="js/mathfunc.js"></script>
+    <script type="text/javascript" src="js/Input.js"></script>
+    <script type="text/javascript" src="js/Loaders/OBJLoader.js"></script>
+    <script type="text/javascript" src="js/myObjects.js"></script>
+    <script type="text/javascript" src="js/Camera.js"></script>
+    <script type="text/javascript" src="js/Scene.js"></script>
+    <script type="text/javascript" src="js/scenes/SolarSystemScene.js"></script>
+    <script type="text/javascript" src="js/scenes/GravityTestScene.js"></script>
+    <script type="text/javascript" src="js/Application.js"></script>
+
+
+    <script>
+        var gravityScene = new GravityTestScene();
+        var App = new Application();
+        App.Init();
+        App.AddScene(gravityScene);
+        App.Render();
+    </script>
+
+</body>
+
+</html>

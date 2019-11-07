@@ -1,10 +1,10 @@
 //Class that takes care of all input
 class Input {
-    static m_InDocument = false;
-    static m_KeyPressed = '';
-    static m_MouseButtonDown = -1;
-    static m_MousePosition = new THREE.Vector2();
-    static m_MouseZoom = 0.0;
+    m_InDocument = false;
+    m_KeyPressed = '';
+    m_MouseButtonDown = -1;
+    m_MousePosition = new THREE.Vector2();
+    m_MouseZoom = 0.0;
 
     constructor() {
         document.onkeydown = function(keyBoardEvent) {
